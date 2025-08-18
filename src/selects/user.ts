@@ -1,0 +1,17 @@
+export const UserSelect = {
+  id: true,
+  email: true,
+  phone: true,
+  fullName: true,
+  accountType: true,
+  provider: true,
+  providerId: true,
+  dateOfBirth: true,
+  gender: true,
+  currentCity: true,
+  profilePic: true,
+  isEmailVerified: true,
+  isActive: true,
+  createdAt: true,
+  updatedAt: true,
+};
