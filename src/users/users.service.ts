@@ -219,8 +219,6 @@ export class UsersService {
   async updateprofile(
     userId: string,
     profileUpdateDto: ProfileUpdateDto,
-    // oldFilesToDelete: string,
-    // uploadfile: string
   ) {
     try {
       const user = await this.prisma.user.findUnique({
@@ -236,12 +234,6 @@ export class UsersService {
         data: profileUpdateDto,
         select: UserSelect,
       });
-
-      // if (oldFilesToDelete) {
-      //   if (existsSync(oldFilesToDelete)) {
-      //     unlinkSync(oldFilesToDelete);
-      //   }
-      // }
       return userprofile;
     } catch (error) {
       handlePrismaError(error, "Failed to update profile.");
@@ -249,7 +241,6 @@ export class UsersService {
   }
 
   createSocialUser(socialUser: SocialUser) {
-
     return this.prisma.user.create({
       data: {
         email: socialUser.email,

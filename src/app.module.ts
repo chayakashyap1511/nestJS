@@ -11,11 +11,9 @@ import { AppController } from "./app.controller";
 
 import { AppService } from "./app.service";
 import { WinstonLoggerService } from "./common/winston-logger/winston-logger.service";
-
 import { LoggerMiddleware } from "./common/middlewares/logger.middleware";
 
 import { TransformInterceptor } from "./common/interceptors/transform.interceptor";
-import { SanitizeInterceptor } from "./common/interceptors/sanitize.interceptor";
 
 import { JwtAuthGuard } from "./auth/guards/jwt-auth.guard";
 import { AllExceptionsFilter } from "./common/filters/all-exceptions.filter";
@@ -69,10 +67,6 @@ import { join } from "path";
       provide: APP_INTERCEPTOR,
       useClass: TransformInterceptor,
     },
-    // {
-    //   provide: APP_INTERCEPTOR,
-    //   useClass: SanitizeInterceptor,
-    // },
     {
       provide: APP_FILTER,
       useClass: AllExceptionsFilter,
