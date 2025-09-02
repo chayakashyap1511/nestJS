@@ -18,7 +18,6 @@ import { VerifyOtpDto } from "./dto/verifyOtp.dto";
 import { ResetPasswordDto } from "./dto/resetPassword.dto";
 import { ForgetPasswordDto } from "./dto/forgetPassword.dto";
 import { PrismaService } from "src/prisma/prisma.service";
-import { EmailService } from "src/common/services/email.service";
 import {
   generateRegisterOtpEmailTemplate,
   generateResetPasswordOtpEmailTemplate,
@@ -27,6 +26,7 @@ import * as argon2 from "argon2";
 import { ChangePasswordDto } from "./dto/changePassword.dto";
 import { ResendOtpDto } from "./dto/resend-otp.dto";
 import { OAuth2Client } from 'google-auth-library';
+import { MailGunEmailService } from "src/common/services/mailgun-email.service";
 
 @Injectable()
 export class AuthService {
@@ -41,9 +41,8 @@ export class AuthService {
     private jwtService: JwtService,
     private configService: AppConfigService,
     private prisma: PrismaService,
-    private emailService: EmailService,
+    private mailgunEmailService: MailGunEmailService,
   ) {
-    sgMail.setApiKey(this.configService.get<string>("SENDGRID_API_KEY") || "");
   }
 
   async getUserFromCode(code: string): Promise<SocialUser> {
@@ -137,7 +136,7 @@ export class AuthService {
     if (!isVerified) {
       otp = await this.saveOtp(user.email);
       const html = generateRegisterOtpEmailTemplate(otp);
-      await this.emailService.sendEmail(
+      await this.mailgunEmailService.sendEmail(
         user.email,
         "Account Registration Verification Code",
         "",
@@ -191,7 +190,7 @@ export class AuthService {
     const expiresAt = otpRecord ? otpRecord.expiresAt : null;
 
     const html = generateRegisterOtpEmailTemplate(otp);
-    await this.emailService.sendEmail(
+    await this.mailgunEmailService.sendEmail(
       user.email,
       "Verification Code",
       "",
@@ -217,7 +216,7 @@ export class AuthService {
     const expiresAt = otpRecord ? otpRecord.expiresAt : null;
 
     const html = generateRegisterOtpEmailTemplate(otp);
-    await this.emailService.sendEmail(
+    await this.mailgunEmailService.sendEmail(
       user.email,
       "Verify your account",
       "",
@@ -328,7 +327,7 @@ export class AuthService {
 
     if (email) {
       const html = generateResetPasswordOtpEmailTemplate(otp);
-      await this.emailService.sendEmail(
+      await this.mailgunEmailService.sendEmail(
         email,
         "Reset Password Verification Code",
         "",

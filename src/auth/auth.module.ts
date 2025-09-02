@@ -8,6 +8,7 @@ import { jwtConstants } from './constants';
 import { AppConfigService } from '../config/config.service';
 import { EmailModule } from 'src/common/services/email.module';
 import { BlacklistModule } from 'src/blacklist/blacklist.module';
+import { MailGunEmailModule } from 'src/common/services/mailgun-email.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { BlacklistModule } from 'src/blacklist/blacklist.module';
       },
     }),
     EmailModule,
+    MailGunEmailModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, AppConfigService],
